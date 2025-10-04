@@ -1,0 +1,46 @@
+# 图传播配置文件
+# 用于TDA + Graph Propagation实验
+
+# 基础设置
+enabled: true                  # 是否启用图传播
+
+# 图构建参数
+graph_builder:
+  k: 10                        # K-NN的邻居数
+  metric: 'cosine'             # 相似度度量: 'cosine' or 'euclidean'
+  use_faiss: true              # 使用FAISS加速（如果可用）
+
+# 传播参数
+propagation:
+  num_iterations: 5            # 传播迭代次数
+  alpha: 0.7                   # 平滑系数 (0=只用初始预测, 1=完全依赖邻居)
+  normalize: true              # 归一化邻接矩阵
+  use_confidence: false        # 是否使用置信度加权
+
+# 动态图管理
+dynamic_graph:
+  max_samples: 1000            # 最大缓存样本数
+  window_size: 500             # 滑动窗口大小
+  update_frequency: 50         # 每N个样本重建图
+
+# 融合策略
+fusion:
+  mode: 'replace'              # 'replace', 'add', 'confidence'
+  tda_weight: 0.5              # TDA logits权重（当mode='add'时）
+  graph_weight: 0.5            # Graph logits权重（当mode='add'时）
+
+# 实验配置（用于消融实验）
+ablation:
+  # 方法变体
+  variants:
+    tda_only:                  # TDA baseline
+      enabled: false
+    graph_only:                # 只用图传播（不用TDA缓存）
+      enabled: false
+    tda_graph:                 # 完整方法
+      enabled: true
+
+  # 参数扫描
+  k_values: [5, 10, 15, 20]    # 不同的K值
+  alpha_values: [0.5, 0.7, 0.9]  # 不同的alpha值
+  iteration_values: [3, 5, 7, 10]  # 不同的迭代次数
