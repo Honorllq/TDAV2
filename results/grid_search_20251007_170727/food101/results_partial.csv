@@ -1,0 +1,10 @@
+cal_enabled,cal_fusion_alpha,cal_confidence_threshold,cal_min_cache_size,accuracy,dataset,exp_id
+False,0.3,0.6,10,86.06930693069307,food101,1
+False,0.3,0.6,20,86.10561056105611,food101,2
+False,0.3,0.6,30,86.03630363036304,food101,3
+False,0.3,0.7,10,86.16501650165017,food101,4
+False,0.3,0.7,20,86.07260726072607,food101,5
+False,0.3,0.7,30,86.14521452145215,food101,6
+False,0.3,0.8,10,86.07260726072607,food101,7
+False,0.3,0.8,20,86.1980198019802,food101,8
+False,0.3,0.8,30,86.15181518151815,food101,9

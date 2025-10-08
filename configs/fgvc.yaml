@@ -19,3 +19,11 @@ negative:
   mask_threshold:
     lower: 0.03
     upper: 1.0
+
+
+calibrate:
+  enabled: True
+  min_cache_size: 100
+  update_interval: 100
+  fusion_alpha: 0.8
+  confidence_threshold: 0.9

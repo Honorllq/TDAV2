@@ -1,0 +1,11 @@
+dataset,best_accuracy,best_params
+caltech101,94.40162271805274,"{'cal_enabled': True, 'cal_fusion_alpha': 0.5, 'cal_confidence_threshold': 0.7, 'cal_min_cache_size': 20}"
+dtd,49.349881796690305,"{'cal_enabled': True, 'cal_fusion_alpha': 0.8, 'cal_confidence_threshold': 0.9, 'cal_min_cache_size': 10}"
+eurosat,62.72839506172839,"{'cal_enabled': True, 'cal_fusion_alpha': 0.7, 'cal_confidence_threshold': 0.7, 'cal_min_cache_size': 30}"
+fgvc,24.902490249024904,"{'cal_enabled': True, 'cal_fusion_alpha': 0.8, 'cal_confidence_threshold': 0.6, 'cal_min_cache_size': 20}"
+food101,85.89438943894389,"{'cal_enabled': True, 'cal_fusion_alpha': 0.9, 'cal_confidence_threshold': 0.6, 'cal_min_cache_size': 30}"
+oxford_flowers,74.17783191230207,"{'cal_enabled': True, 'cal_fusion_alpha': 0.5, 'cal_confidence_threshold': 0.6, 'cal_min_cache_size': 20}"
+oxford_pets,89.86099754701553,"{'cal_enabled': True, 'cal_fusion_alpha': 0.5, 'cal_confidence_threshold': 0.6, 'cal_min_cache_size': 30}"
+stanford_cars,65.72565601293371,"{'cal_enabled': True, 'cal_fusion_alpha': 0.8, 'cal_confidence_threshold': 0.6, 'cal_min_cache_size': 20}"
+sun397,67.02267002518892,"{'cal_enabled': True, 'cal_fusion_alpha': 0.8, 'cal_confidence_threshold': 0.6, 'cal_min_cache_size': 30}"
+ucf101,72.64076130055511,"{'cal_enabled': True, 'cal_fusion_alpha': 0.8, 'cal_confidence_threshold': 0.8, 'cal_min_cache_size': 30}"

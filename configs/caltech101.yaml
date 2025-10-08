@@ -1,11 +1,12 @@
 # Configuration for TDA Hyperparameters
+# Caltech101 Optimized Settings
 
 # --- Positive Cache Configuration ---
 positive:
   enabled: True
-  shot_capacity: 3
-  alpha: 5.0
-  beta: 5.0 
+  shot_capacity: 3       # Keep: paper optimal for Caltech101
+  alpha: 2.0            # FIXED: back to paper default (was 5.0)
+  beta: 5.0             # Keep: paper default
 
 # --- Negative Cache Configuration ---
 negative:
@@ -15,7 +16,16 @@ negative:
   beta: 1.0
   entropy_threshold:
     lower: 0.2
-    upper: 0.5 
+    upper: 0.5
   mask_threshold:
     lower: 0.03
     upper: 1.0
+
+
+# --- GR-CLIP Calibration Configuration ---
+calibrate:
+  enabled: False
+  min_cache_size: 100
+  update_interval: 100
+  fusion_alpha: 0.8
+  confidence_threshold: 0.9

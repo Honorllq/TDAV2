@@ -232,7 +232,7 @@ def get_config_file(config_path, dataset_name):
     
     config_file = os.path.join(config_path, config_name)
     
-    with open(config_file, 'r') as file:
+    with open(config_file, 'r', encoding='utf-8') as file:
         cfg = yaml.load(file, Loader=yaml.SafeLoader)
 
     if not os.path.exists(config_file):

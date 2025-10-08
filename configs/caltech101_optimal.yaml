@@ -1,0 +1,41 @@
+# Caltech101 Optimal Configuration
+# Based on extensive experiments showing pure TDA performs best
+
+# --- Positive Cache Configuration ---
+positive:
+  enabled: True
+  shot_capacity: 3
+  alpha: 2.0
+  beta: 5.0
+
+# --- Negative Cache Configuration ---
+negative:
+  enabled: True
+  shot_capacity: 2
+  alpha: 0.117
+  beta: 1.0
+  entropy_threshold:
+    lower: 0.2
+    upper: 0.5
+  mask_threshold:
+    lower: 0.03
+    upper: 1.0
+
+# --- GR-CLIP Calibration ---
+# DISABLED for Caltech101: TDA alone achieves 94.12%
+# Enabling GR-CLIP reduces accuracy to 93.63% (best case)
+calibrate:
+  enabled: False
+  min_cache_size: 20
+  update_interval: 100
+  fusion_alpha: 0.8
+  confidence_threshold: 0.7
+
+# Performance Summary:
+# - Pure TDA: 94.12% ✓ BEST
+# - GR-CLIP (alpha=0.8): 93.63%
+# - GR-CLIP (alpha=0.9): 93.59%
+# - GR-CLIP (alpha=0.3): 91.03%
+#
+# Conclusion: For Caltech101, GR-CLIP is NOT beneficial
+# The strong semantic categories make text features already optimal

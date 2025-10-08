@@ -1,0 +1,30 @@
+Dataset: stanford_cars
+Best Accuracy: 65.73%
+
+Best Parameters:
+  cal_enabled: True
+  cal_fusion_alpha: 0.8
+  cal_confidence_threshold: 0.6
+  cal_min_cache_size: 20
+
+Full Configuration:
+positive:
+  enabled: True
+  shot_capacity: 3
+  alpha: 2.0
+  beta: 5.0
+
+negative:
+  enabled: True
+  shot_capacity: 2
+  alpha: 0.117
+  beta: 1.0
+  entropy_threshold: {'lower': 0.2, 'upper': 0.5}
+  mask_threshold: {'lower': 0.03, 'upper': 1.0}
+
+calibrate:
+  enabled: True
+  min_cache_size: 20
+  update_interval: 100
+  fusion_alpha: 0.8
+  confidence_threshold: 0.6

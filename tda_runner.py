@@ -29,7 +29,7 @@ from utils import *
 # import debugpy
 # try:
 #     # 启用远程调试用于开发
-#     debugpy.listen(("localhost", 9502))
+#     debugpy.listen(("localhost", 9508))
 #     print("等待调试器连接")
 #     debugpy.wait_for_client()
 # except Exception as e:
@@ -170,8 +170,69 @@ def compute_cache_logits(image_features, cache, alpha, beta, clip_weights, neg_m
         
         # 应用残差比率α来缩放缓存贡献
         return alpha * cache_logits
+def build_visual_prototypes(cache):
+    """
+    构建视觉原型
+    """
+    prototypes={}
+    for class_id in cache.keys():
+        features=[item[0].squeeze(0) for item in cache[class_id]]
+        prototypes[class_id]=torch.stack(features,dim=0).mean(dim=0)
+    return prototypes
 
-def run_test_tda(pos_cfg, neg_cfg, loader, clip_model, clip_weights):
+def calibrate_text_features(visual_prototypes,clip_weights,beta=0.9):
+    """
+    校准文本特征
+    """
+    calibrated = {}
+    for class_id,T_c in enumerate(clip_weights.T):
+        if class_id in visual_prototypes:
+            P_c=visual_prototypes[class_id]
+            T_prime=T_c*beta+P_c*(1-beta)
+            calibrated[class_id]=T_prime /T_prime.norm()
+        else:
+            calibrated[class_id]=T_c
+
+    return torch.stack([calibrated[i] for i in sorted(calibrated.keys())],dim=1)
+
+# def calibrate_text_features(visual_prototypes, clip_weights, alpha=0.05):
+#     """alpha=0.05意味着只做5%的修正,保持文本结构"""
+#     calibrated = {}
+#     for class_id, T_c in enumerate(clip_weights.T):
+#         if class_id in visual_prototypes:
+#             P_c = visual_prototypes[class_id]
+#             # 小幅残差修正
+#             T_prime = T_c + alpha * (P_c - T_c)
+#             calibrated[class_id] = T_prime / T_prime.norm()
+#         else:
+#             calibrated[class_id] = T_c
+#     return torch.stack([calibrated[i] for i in sorted(calibrated.keys())], dim=1)
+# def calibrate_text_features(visual_prototypes, clip_weights, alpha=0.1):
+#     """
+#     残差校准: T' = T + α * (P - T)
+    
+#     优势: 保持文本特征的主要结构,只做小幅调整
+#     """
+#     calibrated = {}
+#     for class_id, T_c in enumerate(clip_weights.T):
+#         if class_id in visual_prototypes:
+#             P_c = visual_prototypes[class_id]
+            
+#             # 计算残差: 视觉原型相对文本的偏移
+#             residual = P_c - T_c
+            
+#             # 残差投影: 只保留与T_c正交的部分 (避免改变T_c的主方向)
+#             residual_orth = residual - (residual @ T_c) * T_c
+            
+#             # 小幅修正
+#             T_prime = T_c + alpha * residual_orth
+#             calibrated[class_id] = T_prime / T_prime.norm()
+#         else:
+#             calibrated[class_id] = T_c
+
+#     return torch.stack([calibrated[i] for i in sorted(calibrated.keys())], dim=1)
+
+def run_test_tda(pos_cfg, neg_cfg,calibrate_cfg, loader, clip_model, clip_weights):
     """
     TDA测试时适应主循环
     
@@ -233,15 +294,30 @@ def run_test_tda(pos_cfg, neg_cfg, loader, clip_model, clip_weights):
                 # 无论熵如何都添加到正缓存(质量由缓存更新逻辑控制)
                 update_cache(pos_cache, pred, [image_features, loss], pos_params['shot_capacity'])
 
+            
+
             # 步骤3: 用中等不确定预测更新负缓存
             # 条件γ(f_test): τ_l < H(f_test @ W_c^T) < τ_h  (公式5)
             if neg_enabled and neg_params['entropy_threshold']['lower'] < prop_entropy < neg_params['entropy_threshold']['upper']:
                 # 只包含中等不确定性的样本用于负学习
                 update_cache(neg_cache, pred, [image_features, loss, prob_map], neg_params['shot_capacity'], True)
 
+            #校准文本特征
+            if calibrate_cfg['enabled'] and len(pos_cache) >= calibrate_cfg['min_cache_size']:
+                visual_prototypes = build_visual_prototypes(pos_cache)
+                # calibrated_weights = calibrate_text_features(visual_prototypes, clip_weights, calibrate_cfg['beta'])
+                calibrated_weights = calibrate_text_features(visual_prototypes, clip_weights,alpha=0.05)
+            else:
+                calibrated_weights = clip_weights
+
+            if i%100==0:
+                print(F.cosine_similarity(clip_weights, calibrated_weights))
+
             # 步骤4: 组合预测(论文公式7)
             # P_TDA(f_test) = f_test @ W_c^T + P_pos(f_test) + P_neg(f_test)
-            final_logits = clip_logits.clone()  # 从CLIP基线开始: f_test @ W_c^T [1, num_classes]
+            #final_logits = clip_logits.clone()  # 从CLIP基线开始: f_test @ W_c^T [1, num_classes]
+
+            final_logits = 100*image_features @ calibrated_weights
             
             # 添加正缓存贡献: + P_pos(f_test) [1, num_classes]
             # 正缓存增强高置信度预测，提供支持性证据
@@ -331,7 +407,7 @@ def main():
 
         # 运行TDA测试时适应算法
         # 处理所有测试样本后返回最终精度
-        acc = run_test_tda(cfg['positive'], cfg['negative'], test_loader, clip_model, clip_weights)
+        acc = run_test_tda(cfg['positive'], cfg['negative'],cfg['calibrate'], test_loader, clip_model, clip_weights)
 
         # 记录最终结果并清理
         if args.wandb:

@@ -1,0 +1,54 @@
+================================================================================
+每个数据集的最佳配置
+================================================================================
+
+数据集: caltech101
+最佳准确率: 94.40%
+最佳参数: {'cal_enabled': True, 'cal_fusion_alpha': 0.5, 'cal_confidence_threshold': 0.7, 'cal_min_cache_size': 20}
+--------------------------------------------------------------------------------
+
+数据集: dtd
+最佳准确率: 49.35%
+最佳参数: {'cal_enabled': True, 'cal_fusion_alpha': 0.8, 'cal_confidence_threshold': 0.9, 'cal_min_cache_size': 10}
+--------------------------------------------------------------------------------
+
+数据集: eurosat
+最佳准确率: 62.73%
+最佳参数: {'cal_enabled': True, 'cal_fusion_alpha': 0.7, 'cal_confidence_threshold': 0.7, 'cal_min_cache_size': 30}
+--------------------------------------------------------------------------------
+
+数据集: fgvc
+最佳准确率: 24.90%
+最佳参数: {'cal_enabled': True, 'cal_fusion_alpha': 0.8, 'cal_confidence_threshold': 0.6, 'cal_min_cache_size': 20}
+--------------------------------------------------------------------------------
+
+数据集: food101
+最佳准确率: 85.89%
+最佳参数: {'cal_enabled': True, 'cal_fusion_alpha': 0.9, 'cal_confidence_threshold': 0.6, 'cal_min_cache_size': 30}
+--------------------------------------------------------------------------------
+
+数据集: oxford_flowers
+最佳准确率: 74.18%
+最佳参数: {'cal_enabled': True, 'cal_fusion_alpha': 0.5, 'cal_confidence_threshold': 0.6, 'cal_min_cache_size': 20}
+--------------------------------------------------------------------------------
+
+数据集: oxford_pets
+最佳准确率: 89.86%
+最佳参数: {'cal_enabled': True, 'cal_fusion_alpha': 0.5, 'cal_confidence_threshold': 0.6, 'cal_min_cache_size': 30}
+--------------------------------------------------------------------------------
+
+数据集: stanford_cars
+最佳准确率: 65.73%
+最佳参数: {'cal_enabled': True, 'cal_fusion_alpha': 0.8, 'cal_confidence_threshold': 0.6, 'cal_min_cache_size': 20}
+--------------------------------------------------------------------------------
+
+数据集: sun397
+最佳准确率: 67.02%
+最佳参数: {'cal_enabled': True, 'cal_fusion_alpha': 0.8, 'cal_confidence_threshold': 0.6, 'cal_min_cache_size': 30}
+--------------------------------------------------------------------------------
+
+数据集: ucf101
+最佳准确率: 72.64%
+最佳参数: {'cal_enabled': True, 'cal_fusion_alpha': 0.8, 'cal_confidence_threshold': 0.8, 'cal_min_cache_size': 30}
+--------------------------------------------------------------------------------
+

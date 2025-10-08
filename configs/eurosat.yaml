@@ -19,3 +19,9 @@ negative:
   mask_threshold:
     lower: 0.03
     upper: 1.0
+
+# --- Calibrate Text Features Configuration ---
+calibrate:
+  enabled: True
+  beta: 0.5
+  min_cache_size: 10
